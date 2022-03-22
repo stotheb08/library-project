@@ -30,15 +30,17 @@ function getMostCommonGenres(books) {
   return genreList.slice(0,5)
 }
 
+
+//Changed getMostPopularbooks now using map function
+ 
 function getMostPopularBooks(books) {
-  let listByPopularity = []
-  for (const book of books){
-    let popularity = book.borrows.length
-    const bookEntry = {name: book.title, count: popularity}
-    listByPopularity.push(bookEntry)
-  }
-  listByPopularity.sort((count1, count2) => (count2.count > count1.count ? 1 : -1))
-  return listByPopularity.slice(0,5)
+  return books
+    .map(book => ({
+      name: book.title,
+      count: book.borrows.length,
+    }))
+    .sort((count1, count2) => count2.count > count1.count ? 1 : -1)
+    .slice(0, 5)
 }
 
 function getMostPopularAuthors(books, authors) {
@@ -54,8 +56,15 @@ function getMostPopularAuthors(books, authors) {
     let authorEntry = {name: authorName, count: count}
     authorsList.push(authorEntry)
   }
-  authorsList.sort((count1, count2) => (count2.count > count1.count ? 1: -1))
-  return authorsList.slice(0,5)
+
+  let organizedAuthorsList = organizeAuthors(authorsList)
+  return organizedAuthorsList
+}
+
+//helper function for getMostPopularAuthors to sort the final list 
+function organizeAuthors(list){
+  list.sort((count1, count2) => (count2.count >count1.count ? 1: -1))
+  return list.slice(0,5)
 }
 
 module.exports = {
